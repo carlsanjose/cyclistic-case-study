@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Average Ride Length by Month</title>
+<style>
+:root{--bg:#fafaf8;--fg:#1f2328;--mut:#6b7280;--grid:#e5e5e0;--c1:#d9480f;--c2:#1c7ed6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181a;--fg:#ececec;--mut:#9aa0a6;--grid:#32353a;--c1:#ff8a4c;--c2:#5aa9f5}}
+:root[data-theme="dark"]{--bg:#17181a;--fg:#ececec;--mut:#9aa0a6;--grid:#32353a;--c1:#ff8a4c;--c2:#5aa9f5}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding:20px}
+main{max-width:860px;margin:0 auto}
+h1{font-size:1.35rem;margin:0 0 4px}
+p.sub{color:var(--mut);margin:0 0 16px;font-size:.9rem}
+.legend{display:flex;gap:18px;font-size:.9rem;margin-bottom:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+svg{width:100%;height:auto;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+.card{border:1px solid var(--grid);border-radius:10px;padding:12px}
+.card b{display:block;font-size:1.25rem}
+.card span{color:var(--mut);font-size:.82rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Average ride length by month</h1>
+<p class="sub">Casual vs. member riders, Nov 2025 to Oct 2026 (minutes)</p>
+<div class="legend"><span><i style="background:var(--c1)"></i>Casual</span><span><i style="background:var(--c2)"></i>Member</span></div>
+<svg id="ch" viewBox="0 0 760 380" role="img" aria-label="Line chart of average ride length by month for casual and member riders"></svg>
+<div class="stats">
+<div class="card"><b>19:31</b><span>Casual median monthly average</span></div>
+<div class="card"><b>12:17</b><span>Member median monthly average</span></div>
+<div class="card"><b>~1.6x</b><span>Casual rides vs. member rides</span></div>
+<div class="card"><b>5.0 vs 2.0 min</b><span>Seasonal range, casual vs. member</span></div>
+</div>
+</main>
+<script>
+var M=["Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"];
+var C=[18.234,16.975,17.785,16.891,20.106,19.444,21.880,21.732,21.198,20.055,19.587,18.172];
+var B=[12.148,11.887,12.709,10.863,11.370,11.552,12.514,12.826,12.702,12.801,12.424,11.796];
+var W=760,H=380,L=52,R=16,T=16,Bt=40,mn=8,mx=24,NS="http://www.w3.org/2000/svg";
+var svg=document.getElementById("ch");
+function el(n,a,t){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(t)e.textContent=t;svg.appendChild(e);return e}
+function X(i){return L+i*(W-L-R)/11}
+function Y(v){return T+(mx-v)*(H-T-Bt)/(mx-mn)}
+function fmt(v){var m=Math.floor(v),s=Math.round((v-m)*60);if(s==60){m++;s=0}return m+":"+(s<10?"0":"")+s}
+for(var g=mn;g<=mx;g+=4){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:"var(--grid)"});el("text",{x:L-8,y:Y(g)+4,"text-anchor":"end","font-size":12,fill:"var(--mut)"},g+" min")}
+M.forEach(function(m,i){el("text",{x:X(i),y:H-14,"text-anchor":"middle","font-size":12,fill:"var(--mut)"},m)});
+function line(d,col,off){
+  el("path",{d:d.map(function(v,i){return(i?"L":"M")+X(i)+","+Y(v)}).join(""),fill:"none",stroke:col,"stroke-width":2.5,"stroke-linejoin":"round"});
+  d.forEach(function(v,i){var c=el("circle",{cx:X(i),cy:Y(v),r:4,fill:col});c.appendChild(document.createElementNS(NS,"title")).textContent=M[i]+": "+fmt(v)});
+  var hi=d.indexOf(Math.max.apply(null,d)),lo=d.indexOf(Math.min.apply(null,d));
+  el("text",{x:X(hi),y:Y(d[hi])+off,"text-anchor":"middle","font-size":12,fill:col,"font-weight":600},fmt(d[hi]));
+  el("text",{x:X(lo),y:Y(d[lo])+(off<0?18:-10)*(off<0?1:1),"text-anchor":"middle","font-size":12,fill:col,"font-weight":600},fmt(d[lo]));
+}
+line(C,"var(--c1)",-10);
+line(B,"var(--c2)",-10);
+</script>
+</body>
+</html>
