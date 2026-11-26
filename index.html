@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cyclistic: Converting Casual Riders into Members</title>
+<style>
+:root{color-scheme:light;--cream:#fbf9f0;--white:#fff;--sage:#e4ecc9;--lime:#b5c96a;--olive:#6b7a2f;--deep:#2f3a1a;--mut:#6d7558;--line:#d9dfc2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--sage);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:12px}
+#stage{container-type:inline-size;width:min(100%,1100px);aspect-ratio:16/9;background:var(--cream);border-radius:16px;box-shadow:0 8px 30px rgba(47,58,26,.15);position:relative;overflow:hidden}
+section{position:absolute;inset:0;padding:5cqw 6cqw;display:none;flex-direction:column;font-size:1.7cqw;line-height:1.45}
+section.on{display:flex}
+section::after{content:"";position:absolute;left:0;top:0;bottom:0;width:1cqw;background:var(--olive)}
+h1{font-size:5.4cqw;margin:0 0 1.5cqw;line-height:1.1}
+h2{font-size:3.3cqw;margin:0 0 .6cqw;line-height:1.15}
+.k{font-size:1.4cqw;letter-spacing:.14em;text-transform:uppercase;color:var(--olive);font-weight:700;margin-bottom:1cqw}
+.sub{color:var(--mut);font-size:2cqw;margin:0 0 2cqw}
+.row{display:grid;gap:2cqw;margin-top:auto}
+.c3{grid-template-columns:repeat(3,1fr)}.c2{grid-template-columns:1fr 1fr}
+.card{background:var(--white);border:1px solid var(--line);border-radius:1.2cqw;padding:2cqw}
+.card b{display:block;font-size:3.6cqw;color:var(--olive);line-height:1.1}
+.card h3{margin:0 0 .6cqw;font-size:2.1cqw}
+.card p{margin:0;color:var(--mut)}
+.title{justify-content:center;background:linear-gradient(135deg,var(--cream) 55%,var(--sage))}
+.pill{display:inline-block;background:var(--olive);color:#fff;padding:.5cqw 1.6cqw;border-radius:99px;font-size:1.6cqw;margin-top:2cqw;align-self:flex-start}
+svg{width:100%;height:auto;flex:1;min-height:0}
+.bars{display:grid;gap:1.4cqw;margin-top:1cqw}
+.br{display:grid;grid-template-columns:9cqw 1fr;align-items:center;gap:1cqw}
+.bar{height:2.6cqw;border-radius:.6cqw;color:#fff;font-weight:700;padding-left:1cqw;display:flex;align-items:center;font-size:1.5cqw;min-width:10cqw;box-sizing:border-box}
+.cas{background:var(--olive)}.mem{background:var(--lime);color:var(--deep)}
+.tag{font-size:1.3cqw;color:var(--mut);margin:1.4cqw 0 0}
+ul{margin:0;padding-left:2cqw}li{margin-bottom:.6cqw}
+.rec{display:grid;grid-template-columns:1fr 1.3fr;gap:1.4cqw 2cqw}
+.rec div{background:var(--white);border:1px solid var(--line);border-radius:1cqw;padding:1.1cqw 1.6cqw}
+.rec .h{background:var(--olive);color:#fff;border:0;font-weight:700}
+.nav{display:flex;gap:10px;align-items:center;color:var(--mut);font-size:14px}
+.nav button{background:var(--olive);color:#fff;border:0;border-radius:8px;padding:8px 18px;font-size:14px;cursor:pointer}
+.nav button:disabled{opacity:.4;cursor:default}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section class="title on" id="s1">
+<div class="k">Case study</div>
+<h1>Cyclistic: turning casual riders<br>into members</h1>
+<p class="sub">What 12 months of ride data tells us, and how to act on it</p>
+<span class="pill">For the Marketing and Executive Teams · Nov 2025 – Oct 2026</span>
+</section>
+
+<section id="s2">
+<div class="k">The headline</div>
+<h2>Casual riders ride longer. Members ride steadier.</h2>
+<p class="sub">Business question: how do the two groups use Cyclistic differently, and how do we convert casual riders?</p>
+<div class="row c3">
+<div class="card"><b>~1.6×</b><h3>Longer rides</h3><p>Casual median monthly average is 19:31 vs. 12:17 for members.</p></div>
+<div class="card"><b>9 of 12</b><h3>Sunday peaks</h3><p>Months in which Sunday was the casual riders’ busiest day.</p></div>
+<div class="card"><b>5 vs 2 min</b><h3>Seasonal swing</h3><p>Casual average ride length varies by about 5 minutes; members by about 2.</p></div>
+</div>
+</section>
+
+<section id="s3">
+<div class="k">Finding 1</div>
+<h2>Casual rides are longer and follow the seasons</h2>
+<p class="sub">Average ride length by month (minutes). Casual peaks May–Jul; members stay flat.</p>
+<svg id="ch" viewBox="0 0 760 270" role="img" aria-label="Line chart of monthly average ride length, casual versus member"></svg>
+</section>
+
+<section id="s4">
+<div class="k">Finding 2</div>
+<h2>Casual riders are weekend-leisure riders</h2>
+<p class="sub">Number of months (out of 12) each day was the busiest day of the week</p>
+<div class="bars" id="bars"></div>
+<p class="tag">Casual riders: Sunday in 9 months, Wednesday their quietest in 10. Members split between Saturday and Sunday.</p>
+</section>
+
+<section id="s5">
+<div class="k">What it means</div>
+<h2>Two different riders, two different needs</h2>
+<p class="sub">Casual riders look like leisure users; members look like routine riders.</p>
+<div class="row c2">
+<div class="card"><h3>Casual rider</h3><ul><li>Long, relaxed rides</li><li>Weekends and summer</li><li>Pays per ride or day</li><li>Rides less often than members</li></ul></div>
+<div class="card"><h3>Annual member</h3><ul><li>Shorter, consistent rides</li><li>Rides more often, steady all year</li><li>Predictable revenue for Cyclistic</li><li>Bike is part of a routine</li></ul></div>
+</div>
+</section>
+
+<section id="s6">
+<div class="k">Recommendations</div>
+<h2>Three ways to convert casual riders</h2>
+<p class="sub">Each action is tied to a finding.</p>
+<div class="rec">
+<div class="h">Finding</div><div class="h">Action</div>
+<div>Casual use peaks on Sundays and in summer</div><div><b>1. Pilot a summer weekend membership</b> that matches how they already ride</div>
+<div>Casual rides run about 60% longer</div><div><b>2. Show the savings:</b> long rides cost more per trip than a membership</div>
+<div>Long rides are where the value is clearest</div><div><b>3. Prompt in the app</b> right after a long ride with a membership offer</div>
+<div>Casual use drops in Dec and Feb</div><div><b>Support:</b> off-season perks so winter isn’t a reason to say no</div>
+</div>
+</section>
+
+<section id="s7">
+<div class="k">Next steps</div>
+<h2>Start small, measure, then scale</h2>
+<div class="row c2" style="margin-top:1cqw">
+<div class="card"><h3>Proposed pilot</h3><ul><li>3-month summer weekend pass test</li><li>Success metric: % of casual riders who convert within 90 days</li><li>A/B test “save money” vs. “ride more often” messaging</li><li>Review results in the fall</li></ul></div>
+<div class="card"><h3>Limits and data to add</h3><ul><li>Most monthly maximums sit just under 60 minutes, suggesting capped data</li><li>Add start/end stations, time of day, and rider surveys</li></ul></div>
+</div>
+</section>
+
+</div>
+<div class="nav"><button id="pv">← Back</button><span id="ct">1 / 7</span><button id="nx">Next →</button></div>
+
+<script>
+var S=document.querySelectorAll("section"),i=0,pv=document.getElementById("pv"),nx=document.getElementById("nx");
+function go(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach(function(s,k){s.classList.toggle("on",k===i)});
+document.getElementById("ct").textContent=(i+1)+" / "+S.length;pv.disabled=i===0;nx.disabled=i===S.length-1;
+try{history.replaceState(null,"","#s"+(i+1))}catch(e){}}
+pv.onclick=function(){go(i-1)};nx.onclick=function(){go(i+1)};
+document.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key===" ")go(i+1);if(e.key==="ArrowLeft")go(i-1)});
+var x0=null;document.getElementById("stage").addEventListener("touchstart",function(e){x0=e.touches[0].clientX});
+document.getElementById("stage").addEventListener("touchend",function(e){if(x0===null)return;var d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)go(i+(d<0?1:-1));x0=null});
+var h=parseInt((location.hash||"").replace("#s",""),10);if(h>=1&&h<=S.length)go(h-1);else go(0);
+
+var M=["Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"];
+var C=[18.234,16.975,17.785,16.891,20.106,19.444,21.880,21.732,21.198,20.055,19.587,18.172];
+var B=[12.148,11.887,12.709,10.863,11.370,11.552,12.514,12.826,12.702,12.801,12.424,11.796];
+var NS="http://www.w3.org/2000/svg",sv=document.getElementById("ch"),L=50,R=10,T=10,W=760,H=270,Bt=30,mn=8,mx=24;
+function el(n,a,t){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(t)e.textContent=t;sv.appendChild(e);return e}
+function X(k){return L+k*(W-L-R)/11}function Y(v){return T+(mx-v)*(H-T-Bt)/(mx-mn)}
+function f(v){var m=Math.floor(v),s=Math.round((v-m)*60);return m+":"+(s<10?"0":"")+s}
+for(var g=mn;g<=mx;g+=4){el("line",{x1:L,x2:W-R,y1:Y(g),y2:Y(g),stroke:"#d9dfc2"});el("text",{x:L-8,y:Y(g)+4,"text-anchor":"end","font-size":12,fill:"#6d7558"},g+" min")}
+M.forEach(function(m,k){el("text",{x:X(k),y:H-8,"text-anchor":"middle","font-size":12,fill:"#6d7558"},m)});
+function ln(d,col,nm,dy){el("path",{d:d.map(function(v,k){return(k?"L":"M")+X(k)+","+Y(v)}).join(""),fill:"none",stroke:col,"stroke-width":3,"stroke-linejoin":"round"});
+d.forEach(function(v,k){var c=el("circle",{cx:X(k),cy:Y(v),r:4,fill:col});c.appendChild(document.createElementNS(NS,"title")).textContent=M[k]+": "+f(v)});
+var hi=d.indexOf(Math.max.apply(null,d)),lo=d.indexOf(Math.min.apply(null,d));
+el("text",{x:X(hi),y:Y(d[hi])-10,"text-anchor":"middle","font-size":12,"font-weight":700,fill:col},f(d[hi]));
+el("text",{x:X(lo),y:Y(d[lo])+18,"text-anchor":"middle","font-size":12,"font-weight":700,fill:col},f(d[lo]));
+el("text",{x:W-R,y:Y(d[11])+dy,"text-anchor":"end","font-size":13,"font-weight":700,fill:col},nm)}
+ln(C,"#6b7a2f","Casual",-26);ln(B,"#8fa83a","Member",-18);
+
+var D=[["Sunday",9,5],["Saturday",2,5],["Monday",1,0],["Tuesday",0,1],["Friday",0,1]],bx=document.getElementById("bars");
+D.forEach(function(r){var d=document.createElement("div");d.className="br";
+d.innerHTML="<b>"+r[0]+"</b><div>"+(r[1]?'<div class="bar cas" style="width:'+r[1]*9+'%">Casual '+r[1]+"</div>":"")+(r[2]?'<div class="bar mem" style="width:'+r[2]*9+'%;margin-top:4px">Member '+r[2]+"</div>":"")+"</div>";bx.appendChild(d)});
+</script>
+</body>
+</html>
