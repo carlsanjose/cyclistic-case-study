@@ -1,12 +1,13 @@
 # Cyclistic Case Study: Converting Casual Riders into Members
 The first case study in my Google Data Analytics Capstone.
 > Cyclistic is a fictional company created for this case study.
-> # Scenario: I'm a junior data analyst working on the marketing analyst team at Cyclistic, a bike-share
+> ### Scenario:
+> I'm a junior data analyst working on the marketing analyst team at Cyclistic, a bike-share
 company in Chicago.
-> # About the company: 
-Customers who purchase single-ride or full-day passes are referred to as casual riders.
-Customers who purchase annual memberships are Cyclistic members.
-Cyclistic’s finance analysts have concluded that annual members are much more profitable than casual riders.
+> ### About the company:
+> Customers who purchase single-ride or full-day passes are referred to as casual riders.
+> Customers who purchase annual memberships are Cyclistic members.
+> Cyclistic’s finance analysts have concluded that annual members are much more profitable than casual riders.
 
 ## Business Question:
 How do casual riders and annual members use bikes differently, and how can Cyclistic convert casual riders into members?
